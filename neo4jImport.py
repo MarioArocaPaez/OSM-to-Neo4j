@@ -20,7 +20,7 @@ gdf_relationships.reset_index(inplace=True)
 # Define Cypher queries to create constraints and indexes
 constraint_query = "CREATE CONSTRAINT IF NOT EXISTS FOR (i:Intersection) REQUIRE i.osmid IS UNIQUE"
 rel_index_query = "CREATE INDEX IF NOT EXISTS FOR ()-[r:ROAD_SEGMENT]-() ON r.osmids"
-address_constraint_query = "CREATE CONSTRAINT IF NOT EXISTS FOR (a:Address) REQUIRE a.id IS UNIQUE"
+# address_constraint_query = "CREATE CONSTRAINT IF NOT EXISTS FOR (a:Address) REQUIRE a.id IS UNIQUE"
 point_index_query = "CREATE POINT INDEX IF NOT EXISTS FOR (i:Intersection) ON i.location"
 
 # Cypher query to import road network nodes GeoDataFrame
@@ -30,7 +30,8 @@ node_query = '''
     UNWIND $rows AS row
     WITH row WHERE row.osmid IS NOT NULL
     MERGE (i:Intersection {osmid: row.osmid})
-        SET i.location = point({latitude: row.y, longitude: row.x }),
+        ON CREATE SET i.location = point({latitude: row.y, longitude: row.x }),
+            i.location = point({latitude: row.y, longitude: row.x }),
             i.ref = row.ref,
             i.highway = row.highway,
             i.street_count = toInteger(row.street_count)
@@ -57,7 +58,7 @@ rels_query = '''
 def create_constraints(tx):
     results = tx.run(constraint_query)
     results = tx.run(rel_index_query)
-    results = tx.run(address_constraint_query)
+    # results = tx.run(address_constraint_query)
     results = tx.run(point_index_query)
 
 # Function to batch GeoDataFrames
