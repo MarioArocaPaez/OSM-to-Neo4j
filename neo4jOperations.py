@@ -2,6 +2,10 @@ import neo4j
 import osmnx as ox
 import matplotlib.pyplot as plt
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Neo4j connection details
 NEO4J_URI = os.getenv("NEO4J_URI")
@@ -9,7 +13,7 @@ NEO4J_USER = os.getenv("NEO4J_USER")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
 # Create a Neo4j driver
-driver = neo4j.GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+driver = neo4j.GraphDatabase.driver(NEO4J_URI.strip(), auth=(NEO4J_USER, NEO4J_PASSWORD))
 
 # Neo4j query
 neo4j_query = '''

@@ -1,6 +1,10 @@
 import neo4j
 import osmnx as ox
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Neo4j connection details
 NEO4J_URI = os.getenv("NEO4J_URI")
