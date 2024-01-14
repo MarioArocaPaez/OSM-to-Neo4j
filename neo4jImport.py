@@ -14,6 +14,15 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 # Create a Neo4j driver
 driver = neo4j.GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
+# Cypher queries to delete all nodes and relationships
+delete_all_nodes_query = "MATCH (n) DETACH DELETE n"
+delete_all_rels_query = "MATCH ()-[r]-() DELETE r"
+
+# Execute queries to delete all nodes and relationships
+with driver.session() as session:
+    session.run(delete_all_rels_query)
+    session.run(delete_all_nodes_query)
+
 # Search OpenStreetMap and create an OSMNx graph
 G = ox.graph_from_place("Sevilla, Andalucía, España", network_type="drive")
 
@@ -24,7 +33,6 @@ gdf_relationships.reset_index(inplace=True)
 # Define Cypher queries to create constraints and indexes
 constraint_query = "CREATE CONSTRAINT IF NOT EXISTS FOR (i:Intersection) REQUIRE i.osmid IS UNIQUE"
 rel_index_query = "CREATE INDEX IF NOT EXISTS FOR ()-[r:ROAD_SEGMENT]-() ON r.osmids"
-# address_constraint_query = "CREATE CONSTRAINT IF NOT EXISTS FOR (a:Address) REQUIRE a.id IS UNIQUE"
 point_index_query = "CREATE POINT INDEX IF NOT EXISTS FOR (i:Intersection) ON i.location"
 
 # Cypher query to import road network nodes GeoDataFrame
@@ -62,7 +70,6 @@ rels_query = '''
 def create_constraints(tx):
     results = tx.run(constraint_query)
     results = tx.run(rel_index_query)
-    # results = tx.run(address_constraint_query)
     results = tx.run(point_index_query)
 
 # Function to batch GeoDataFrames
