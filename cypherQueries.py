@@ -1,3 +1,10 @@
+# Route with weight
+'''
+    MATCH path=shortestPath((startNode)-[:ROAD_SEGMENT*]->(endNode))
+    WHERE ID(startNode) = 1716 AND ID(endNode) = 5260
+    WITH path, [rel IN relationships(path) | rel.name] AS edgeNames, REDUCE(s = 0, x IN relationships(path) | s + x.length) AS totalDistance
+    RETURN path, edgeNames, totalDistance
+'''
 # Route Reina Mercedes to Pino Montano
 '''
     MATCH path=shortestPath((startNode)-[:ROAD_SEGMENT*]->(endNode))
