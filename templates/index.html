@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popoto.js Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/popoto/dist/popoto.min.js"></script>
+</head>
+<body>
+    <!-- Div container for the graph visualization -->
+    <div id="popoto-graph" style="height: 600px;"></div>
+
+    <!-- Script to configure and load the graph with Popoto.js -->
+    <script>
+        // Extracted nodes and links from the Flask template
+        var nodes = {{ nodes|tojson }};
+        var links = {{ links|tojson }};
+
+        // Configuration of the nodes and links
+        Popoto.graph.getNodes = function (callback) {
+            callback(nodes);
+        };
+
+        Popoto.graph.getLinks = function (callback) {
+            callback(links);
+        };
+
+        // Configuration of the visualization
+        var visualization = {
+            container: "#popoto-graph",
+            pan: true,
+            zoom: true
+        };
+
+        // Load the graph with Popoto.js
+        Popoto.graph.getVisualization(visualization).then(function (popoto) {
+            // Execute the initial query
+            popoto.runInitialQuery();
+        });
+    </script>
+</body>
+</html>
+
