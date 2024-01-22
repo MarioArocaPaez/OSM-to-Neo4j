@@ -18,7 +18,7 @@ driver = neo4j.GraphDatabase.driver(NEO4J_URI.strip(), auth=(NEO4J_USER, NEO4J_P
 # Neo4j query
 neo4j_query = '''
     MATCH path=shortestPath((startNode)-[:ROAD_SEGMENT*]->(endNode))
-    WHERE ID(startNode) = 1716 AND ID(endNode) = 5260
+    WHERE ID(startNode) = 6308 AND ID(endNode) = 426
     WITH path, [rel IN relationships(path) | rel.name] AS edgeNames, REDUCE(s = 0, x IN relationships(path) | s + x.length) AS totalDistance
     RETURN path, edgeNames, totalDistance
 '''

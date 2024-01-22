@@ -24,3 +24,9 @@ RETURN path, [rel IN relationships(path) | rel.name] AS edgeNames
 MATCH (node)-[:ROAD_SEGMENT {name: 'Avenida de la Reina Mercedes'}]->()
 RETURN node
 '''
+
+# See the whole graph
+'''
+MATCH p = (:Intersection)-[:ROAD_SEGMENT]->(:Intersection)
+RETURN p
+'''

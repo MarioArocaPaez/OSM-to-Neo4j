@@ -2,5 +2,3 @@ neo4j
 osmnx
 python-dotenv
 matplotlib
-py2neo
-Flask
